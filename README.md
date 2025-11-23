@@ -99,6 +99,7 @@ cat server/supabase/supabase-migration.sql
 ```
 
 This creates:
+
 - `profiles` - Merchant profiles with auto-generated API keys
 - `products` - Product catalog
 - `customers` - Customer records
@@ -109,6 +110,7 @@ This creates:
 #### 4. Configure environment variables
 
 **Root `.env`:**
+
 ```env
 # x402 Configuration
 ADDRESS=0x_YOUR_WALLET_ADDRESS_HERE
@@ -129,6 +131,7 @@ ML_SERVICE_URL=http://localhost:3003
 ```
 
 **Merchant Frontend `.env`:**
+
 ```env
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your_anon_key
@@ -136,6 +139,7 @@ VITE_API_BASE_URL=http://localhost:3001
 ```
 
 **Analysis Engine `.env`:**
+
 ```env
 PORT=3002
 ML_SERVICE_URL=http://localhost:3003
@@ -144,6 +148,7 @@ RISK_THRESHOLD=75
 ```
 
 **ML Service `.env`:**
+
 ```env
 PORT=3003
 MODEL_VERSION=1.0.0
@@ -196,6 +201,7 @@ npm run dev
 ```
 
 **Service URLs:**
+
 - 🌐 Landing Page: http://localhost:5173
 - 💼 Merchant Dashboard: http://localhost:5174
 - 🔧 Server API: http://localhost:3001
@@ -209,6 +215,7 @@ npm run dev
 Modern marketing website showcasing ZapPay features.
 
 **Features:**
+
 - Hero section with product demo
 - Feature highlights
 - Pricing information
@@ -228,6 +235,7 @@ npm run build     # Build for production
 Comprehensive dashboard for merchants to manage crypto payments.
 
 **Features:**
+
 - 📊 **Dashboard**: Real-time analytics and charts
 - 💳 **Transactions**: Paginated transaction history with filtering
 - 💰 **Balance**: Multi-chain crypto balance tracking
@@ -241,6 +249,7 @@ Comprehensive dashboard for merchants to manage crypto payments.
 **Tech Stack:** React 18 + TypeScript + shadcn/ui + React Router + Supabase + viem + x402-axios
 
 **Key Files:**
+
 - `src/contexts/WalletContext.tsx` - Ethereum wallet management (Base Sepolia)
 - `src/contexts/AuthContext.tsx` - Supabase authentication
 - `src/services/api.ts` - API client with x402 payment interceptor
@@ -258,6 +267,7 @@ npm run lint      # Run ESLint
 Backend API with x402 payment middleware and transaction recording.
 
 **Features:**
+
 - ✅ **Payment Processing**: HTTP 402 payment-gated endpoints
 - 🔐 **Authentication**: JWT-based auth with Supabase
 - 💾 **Transaction Recording**: Records ALL payment states (pending, completed, failed, cancelled)
@@ -269,16 +279,19 @@ Backend API with x402 payment middleware and transaction recording.
 **Tech Stack:** Hono + TypeScript + Supabase + x402-hono
 
 **Key Files:**
+
 - `index.ts` - Main server with all routes
 - `middleware/walletRiskMiddleware.ts` - Risk analysis integration (now extracts correct amounts!)
 - `services/transactionService.ts` - Transaction recording logic
 - `supabase/supabase-migration.sql` - Database schema
 
 **Payment Endpoints:**
+
 - `POST /api/pay/session` - 24-hour access ($1.00)
 - `POST /api/pay/onetime` - One-time access ($0.10)
 
 **Management Endpoints:**
+
 - `GET/POST /api/products` - Product management
 - `GET/POST /api/payment-links` - Payment link management
 - `GET /api/transactions` - Transaction history with filters
@@ -295,6 +308,7 @@ npm start         # Run compiled build
 Risk analysis service for wallet scoring and fraud detection.
 
 **Features:**
+
 - 🔍 **Multi-Layer Analysis**: ML + Rules + AML checks
 - 🧠 **Hybrid Scoring**: 60% ML + 20% Rules + 20% AML
 - 🚫 **Blacklist Checking**: Automatic wallet blocking
@@ -304,22 +318,24 @@ Risk analysis service for wallet scoring and fraud detection.
 **Tech Stack:** Express + TypeScript
 
 **Scoring Breakdown:**
+
 ```typescript
 // Hybrid scoring formula
-finalScore = (
-  mlPrediction.risk_score * 0.6 +  // ML models
-  ruleBasedScore * 0.2 +            // Rule engine
-  amlScore * 0.2                    // AML checks
-)
+finalScore =
+	mlPrediction.risk_score * 0.6 + // ML models
+	ruleBasedScore * 0.2 + // Rule engine
+	amlScore * 0.2; // AML checks
 ```
 
 **Risk Levels:**
+
 - 0-25: Low Risk ✅
 - 25-50: Medium Risk ⚠️
 - 50-75: High Risk 🔶
 - 75-100: Critical Risk 🔴 (Blocked)
 
 **API Endpoints:**
+
 - `GET /api/risk/wallet/:address` - Comprehensive wallet analysis
 - `GET /health` - Service health check
 
@@ -334,6 +350,7 @@ npm run type-check    # TypeScript type checking
 AI-powered fraud detection with ensemble machine learning models.
 
 **Features:**
+
 - 🎯 **97% Accuracy**: Ensemble of Random Forest (96%) + XGBoost (95%)
 - 🔍 **Anomaly Detection**: Isolation Forest for novel fraud patterns
 - 📊 **Explainable AI**: SHAP values for prediction transparency
@@ -343,12 +360,14 @@ AI-powered fraud detection with ensemble machine learning models.
 **Tech Stack:** FastAPI + Python + scikit-learn + XGBoost + SHAP
 
 **Model Details:**
+
 - **Random Forest**: 200 trees, max depth 20, balanced class weights
 - **XGBoost**: 200 estimators, max depth 10, auto-balanced
 - **Isolation Forest**: 100 estimators, 10% contamination
 - **Training Data**: Kaggle Ethereum Fraud Dataset (9,841 samples)
 
 **API Endpoints:**
+
 - `POST /api/predict` - Fraud probability prediction
 - `POST /api/predict/explain` - Explainable prediction with SHAP
 - `POST /api/predict/anomaly` - Anomaly detection
@@ -369,6 +388,7 @@ pytest tests/         # Run tests
 Original x402 browser wallet demo for end users.
 
 **Features:**
+
 - Wallet connection (MetaMask, WalletConnect)
 - Payment processing
 - Transaction status
@@ -383,6 +403,7 @@ npm run dev       # Start Vite dev server
 Local monorepo of x402 protocol packages using pnpm workspaces and Turbo.
 
 **Packages:**
+
 - `x402` - Core protocol implementation
 - `x402-axios` - Axios interceptor for React/Vue
 - `x402-hono` - Hono middleware
@@ -405,6 +426,7 @@ pnpm test         # Run all tests
 ### Multi-Layer Protection
 
 **1. Wallet Risk Middleware**
+
 - Intercepts all payment requests
 - Extracts wallet address from headers
 - Checks risk score via Analysis Engine
@@ -412,6 +434,7 @@ pnpm test         # Run all tests
 - Records failed attempts with correct amounts
 
 **2. ML-Powered Detection**
+
 ```
 Request → Risk Check → ML Analysis → Rule Engine → AML Check
    ↓           ↓            ↓            ↓            ↓
@@ -420,12 +443,14 @@ Address    (0-100)      (0-1.0)      Match      Check
 ```
 
 **3. Blacklist System**
+
 - Configurable in `analysis-engine/data/blacklist.json`
 - Automatic blocking of known fraud addresses
 - Instant rejection with detailed reason
 
 **4. Transaction Recording**
 All payment attempts are recorded:
+
 - ✅ Completed: Successful payments
 - ⏳ Pending: In-progress payments
 - ❌ Failed: Payment failures (now with correct amounts!)
@@ -457,22 +482,26 @@ All payment attempts are recorded:
 ### Key Tables
 
 **profiles**
+
 - Merchant profiles
 - Auto-generated API keys
 - Linked to Supabase auth.users
 
 **products**
+
 - Product catalog
 - Name, description, pricing
 - Multi-tenant via owner_id
 
 **payment_links**
+
 - Dynamic payment URLs
 - Linked to products
 - Expiry dates
 - Unique hashed links (pay_xxxxx)
 
 **transactions**
+
 - Complete audit trail
 - All payment states
 - Crypto + fiat amounts
@@ -480,6 +509,7 @@ All payment attempts are recorded:
 - Customer linkage
 
 **balances**
+
 - Multi-chain balances
 - Real-time updates
 - USD value tracking
@@ -514,6 +544,7 @@ https://yourapp.com/pay/pay_32e8bbf161ee9e82
 ```
 
 When customers pay:
+
 - Link validated
 - Product pricing loaded
 - x402 payment flow initiated
@@ -549,6 +580,7 @@ Use the blacklisted wallet for testing:
 ### Environment Setup
 
 **Production checklist:**
+
 - [ ] Configure production wallet address
 - [ ] Update CORS origins
 - [ ] Configure Redis for sessions (replace in-memory storage)
@@ -559,22 +591,26 @@ Use the blacklisted wallet for testing:
 ### Deployment Options
 
 **Frontend (Landing + Merchant):**
+
 - Vercel (recommended)
 - Netlify
 - Cloudflare Pages
 
 **Backend (Server + Analysis Engine):**
+
 - Railway
 - Render
 - Fly.io
 - AWS ECS
 
 **ML Service:**
+
 - AWS Lambda (with container)
 - Google Cloud Run
 - Railway (with Docker)
 
 **Database:**
+
 - Supabase (managed)
 - Self-hosted PostgreSQL
 
@@ -596,6 +632,7 @@ CMD ["npm", "start"]
 ### Key Metrics to Track
 
 **Business Metrics:**
+
 - Total transaction volume
 - Success rate
 - Failed payment reasons
@@ -603,6 +640,7 @@ CMD ["npm", "start"]
 - Customer acquisition
 
 **Technical Metrics:**
+
 - API response times
 - Error rates
 - Fraud detection accuracy
@@ -610,6 +648,7 @@ CMD ["npm", "start"]
 - Model prediction latency
 
 **Security Metrics:**
+
 - Blocked transactions
 - Risk score distribution
 - Blacklist hits
@@ -659,6 +698,7 @@ ZapPay/
 ### Common Issues
 
 **❌ Server won't start - Port 3001 in use**
+
 ```bash
 # Kill process on port
 npx kill-port 3001
@@ -668,27 +708,32 @@ taskkill /PID <pid> /F
 ```
 
 **❌ Failed transactions showing $0.00**
+
 - **Fixed!** Update `server/middleware/walletRiskMiddleware.ts`
 - Now extracts correct amount from endpoint path
 - Restart server to apply fix
 
 **❌ ML models not loading**
+
 ```bash
 cd ml-service
 python train_models.py --version 1.0.0
 ```
 
 **❌ Wallet connection fails**
+
 - Check you're on Base Sepolia (Chain ID: 84532)
 - Ensure MetaMask is installed
 - Add Base Sepolia network to MetaMask
 
 **❌ Payment blocked unexpectedly**
+
 - Check wallet not in blacklist
 - Review risk score in console logs
 - Lower threshold in Analysis Engine config
 
 **❌ Supabase connection errors**
+
 - Verify environment variables
 - Check Supabase project is active
 - Ensure RLS policies are configured
@@ -696,6 +741,7 @@ python train_models.py --version 1.0.0
 ## 📋 Roadmap
 
 ### Phase 1: Core Platform ✅
+
 - [x] x402 payment integration
 - [x] Merchant dashboard
 - [x] Transaction recording
@@ -703,6 +749,7 @@ python train_models.py --version 1.0.0
 - [x] Multi-chain support
 
 ### Phase 2: Fraud Detection ✅
+
 - [x] ML service with 97% accuracy
 - [x] Rule-based analysis
 - [x] Wallet risk scoring
@@ -710,12 +757,14 @@ python train_models.py --version 1.0.0
 - [x] Real-time blocking
 
 ### Phase 3: Enhancement 🚧
+
 - [ ] WordPress plugin
 - [ ] Shopify plugin
 - [ ] Stablecoin interest (up to 4%)
 - [ ] Mobile app for merchants
 
 ### Phase 4: Scale 📅
+
 - [ ] Multi-region deployment
 - [ ] Advanced analytics dashboard
 - [ ] Webhook notifications
@@ -749,6 +798,7 @@ This project is based on the x402 protocol example. Please refer to the original
 ## 🔗 Links
 
 **Documentation:**
+
 - [x402 Protocol](https://x402.org)
 - [Viem](https://viem.sh)
 - [Hono](https://hono.dev)
@@ -756,32 +806,29 @@ This project is based on the x402 protocol example. Please refer to the original
 - [FastAPI](https://fastapi.tiangolo.com)
 
 **Tools:**
+
 - [Tailwind CSS](https://tailwindcss.com)
 - [shadcn/ui](https://ui.shadcn.com)
 - [Radix UI](https://www.radix-ui.com)
 - [React Router](https://reactrouter.com)
 
 **Blockchain:**
+
 - [Base](https://base.org)
 - [Scroll](https://scroll.io)
 
 ## 🆘 Support
 
 **For issues related to:**
+
 - **x402 Protocol**: [x402 Documentation](https://x402.org)
 - **ZapPay Platform**: Open an issue in this repository
 - **Supabase**: [Supabase Documentation](https://supabase.com/docs)
 - **ML Service**: See [ml-service/README.md](./ml-service/README.md)
 
-## 📞 Contact
-
-- **Website**: Coming soon
-- **Email**: skky5687@gmail.com
-- **Twitter**: [@ZapPay_Official](https://x.com/zappay_official)
 
 ---
 
 **Built with ❤️ by the ZapPay team**
 
-*Powered by x402 Protocol | Secured by ML | Zero Fees Forever*#   R e v r P a y  
- 
+_Powered by x402 Protocol | Secured by ML | Zero Fees Forever_
