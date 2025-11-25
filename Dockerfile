@@ -41,6 +41,17 @@ RUN mkdir -p x402-packages/packages
 COPY --from=builder /app/x402-packages/packages/x402 ./x402-packages/packages/x402
 COPY --from=builder /app/x402-packages/packages/x402-hono ./x402-packages/packages/x402-hono
 
+# Install x402's production dependencies first (x402-hono depends on it)
+WORKDIR /app/x402-packages/packages/x402
+COPY --from=builder /app/x402-packages/packages/x402/package.json ./package.json
+RUN npm ci --production
+
+# Install x402-hono's production dependencies
+# x402-hono needs viem, hono, zod, etc. at runtime
+WORKDIR /app/x402-packages/packages/x402-hono
+COPY --from=builder /app/x402-packages/packages/x402-hono/package.json ./package.json
+RUN npm ci --production
+
 # Server directory structure (package.json expects file:../x402-packages)
 WORKDIR /app/server
 
