@@ -6,7 +6,7 @@ import { paymentMiddleware, Network, Resource } from 'x402-hono';
 import { v4 as uuidv4 } from 'uuid';
 import { createClient } from '@supabase/supabase-js';
 import { createHash } from 'crypto';
-import { walletRiskMiddleware } from './middleware/walletRiskMiddleware';
+import { walletRiskMiddleware } from './middleware/walletRiskMiddleware.js';
 import {
 	recordSuccessfulPayment,
 	recordFailedPayment,
@@ -14,7 +14,7 @@ import {
 	getSystemOwnerId,
 	extractPaymentLinkFromContext,
 	getPaymentLinkData,
-} from './services/transactionService';
+} from './services/transactionService.js';
 
 config();
 
