@@ -35,20 +35,27 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-
+# Maintain directory structure for file: dependencies
+# x402-packages must be at /app/x402-packages (relative to server)
 RUN mkdir -p x402-packages/packages
 COPY --from=builder /app/x402-packages/packages/x402 ./x402-packages/packages/x402
 COPY --from=builder /app/x402-packages/packages/x402-hono ./x402-packages/packages/x402-hono
 
+# Server directory structure (package.json expects file:../x402-packages)
+WORKDIR /app/server
 
+# Copy server package files
 COPY server/package*.json ./
 
+# Install production dependencies
+# The file: protocol will resolve ../x402-packages from /app/server
 RUN npm ci --production
 
+# Copy built server dist
 COPY --from=builder /app/server/dist ./dist
-
 
 EXPOSE 3001
 
+# Start server from server directory
 CMD ["node", "dist/index.js"]
 
