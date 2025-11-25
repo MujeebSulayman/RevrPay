@@ -1,15 +1,16 @@
 {
-  "name": "browser-wallet-x402-example",
-  "version": "1.0.0",
-  "description": "Example of x402 payments with browser wallet integration",
-  "private": true,
-  "scripts": {
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "cd server && npm run dev",
-    "dev:client": "cd client && npm run dev",
-    "install:all": "npm install && cd server && npm install && cd ../client && npm install"
-  },
-  "devDependencies": {
-    "concurrently": "^8.2.2"
-  }
-} 
+	"name": "browser-wallet-x402-example",
+	"version": "1.0.0",
+	"description": "Example of x402 payments with browser wallet integration",
+	"private": true,
+	"scripts": {
+		"dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+		"dev:server": "cd server && npm run dev",
+		"dev:client": "cd merchant-frontend && npm run dev",
+		"install:all": "npm install && npm run build:x402 && cd server && npm install && cd ../merchant-frontend && npm install && cd ../analysis-engine && npm install && cd ../facilitator && npm install",
+		"build:x402": "cd x402-packages && pnpm install && set NODE_OPTIONS=--max-old-space-size=8192 && pnpm --filter=x402 build && pnpm --filter=x402-hono build && pnpm --filter=x402-axios build"
+	},
+	"devDependencies": {
+		"concurrently": "^8.2.2"
+	}
+}

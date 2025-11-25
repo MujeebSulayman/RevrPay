@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(data.session?.user ?? null);
       setLoading(false);
       if (data.session?.user) {
-        upsertProfile(data.session.user).catch(() => {});
+        upsertProfile(data.session.user).catch(() => { });
       }
     });
 
@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setSession(newSession);
       setUser(newSession?.user ?? null);
       if (newSession?.user) {
-        upsertProfile(newSession.user).catch(() => {});
+        upsertProfile(newSession.user).catch(() => { });
       }
     });
     return () => { sub.subscription.unsubscribe(); };
