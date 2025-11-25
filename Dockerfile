@@ -20,43 +20,35 @@ RUN NODE_OPTIONS=--max-old-space-size=8192 pnpm --filter=x402 build && \
 # Now build server
 WORKDIR /app/server
 
-# Copy server package files
+
 COPY server/package*.json ./
 COPY server/tsconfig.json ./
 
-# Install server dependencies (this will link to built x402-hono)
 RUN npm ci
 
-# Copy server source code
 COPY server/ ./
 
-# Build TypeScript
+
 RUN npm run build
 
-# Production stage
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Maintain directory structure for file: dependencies
-# Create x402-packages structure and copy only needed built packages
+
 RUN mkdir -p x402-packages/packages
 COPY --from=builder /app/x402-packages/packages/x402 ./x402-packages/packages/x402
 COPY --from=builder /app/x402-packages/packages/x402-hono ./x402-packages/packages/x402-hono
 
-# Copy server package files
+
 COPY server/package*.json ./
 
-# Install production dependencies only
-# The file: protocol will work because x402-packages structure is maintained
 RUN npm ci --production
 
-# Copy built server
 COPY --from=builder /app/server/dist ./dist
 
-# Expose port
+
 EXPOSE 3001
 
-# Start server
-CMD ["npm", "start"]
+CMD ["node", "dist/index.js"]
 
