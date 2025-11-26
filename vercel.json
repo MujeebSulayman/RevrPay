@@ -1,6 +1,6 @@
 {
 	"$schema": "https://openapi.vercel.sh/vercel.json",
-	"installCommand": "corepack enable && corepack prepare pnpm@10.7.0 --activate && npm install && npm run build:x402 && cd merchant-frontend && npm install",
+	"installCommand": "corepack enable && corepack prepare pnpm@10.7.0 --activate && cd x402-packages && pnpm install && NODE_OPTIONS=--max-old-space-size=8192 pnpm --filter x402 build && NODE_OPTIONS=--max-old-space-size=8192 pnpm --filter x402-hono build && NODE_OPTIONS=--max-old-space-size=8192 pnpm --filter x402-axios build && cd ../merchant-frontend && npm install",
 	"buildCommand": "cd merchant-frontend && npm run build",
 	"outputDirectory": "merchant-frontend/dist",
 	"framework": "vite"
