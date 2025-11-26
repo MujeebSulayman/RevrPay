@@ -43,7 +43,7 @@ async def lifespan(app: FastAPI):
 
 # Create FastAPI app
 app = FastAPI(
-    title="ZapPay ML Fraud Detection Service",
+    title="RevrPay ML Fraud Detection Service",
     description="AI-powered fraud detection for cryptocurrency payments",
     version=settings.model_version,
     lifespan=lifespan

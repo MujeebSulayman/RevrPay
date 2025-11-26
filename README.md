@@ -1,8 +1,8 @@
-# ZapPay 💳⚡
+# RevrPay 💳⚡
 
 > **The first 0% transaction fee Web3 payment gateway with built-in AI-powered fraud detection**
 
-ZapPay is a comprehensive cryptocurrency payment platform built on the x402 protocol, providing a Stripe-like experience for merchants to accept crypto payments with zero fees. Extended with real-time blocking, advance fraud detection, Machine learning risk analysis, and merchant dashboard capabilities.
+RevrPay is a comprehensive cryptocurrency payment platform built on the x402 protocol, providing a Stripe-like experience for merchants to accept crypto payments with zero fees. Extended with real-time blocking, advance fraud detection, Machine learning risk analysis, and merchant dashboard capabilities.
 
 ![Home Page](./assets/preview.png)
 
@@ -22,7 +22,7 @@ ZapPay is a comprehensive cryptocurrency payment platform built on the x402 prot
 ## 🏗️ Architecture Overview
 
 ```
-ZapPay Platform
+RevrPay Platform
 ├── 🌐 Landing Page (Port 5173)
 │   └── Marketing website
 │
@@ -76,8 +76,8 @@ ZapPay Platform
 #### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/ZapPay.git
-cd ZapPay
+git clone https://github.com/your-username/RevrPay.git
+cd RevrPay
 ```
 
 #### 2. Install dependencies
@@ -212,7 +212,7 @@ npm run dev
 
 ### 🌐 Landing Page
 
-Modern marketing website showcasing ZapPay features.
+Modern marketing website showcasing RevrPay features.
 
 **Features:**
 
@@ -659,7 +659,7 @@ CMD ["npm", "start"]
 ### Project Structure
 
 ```
-ZapPay/
+RevrPay/
 ├── server/              # Hono backend
 ├── client/              # x402 demo client
 ├── landing-page/        # Marketing site
@@ -822,13 +822,12 @@ This project is based on the x402 protocol example. Please refer to the original
 **For issues related to:**
 
 - **x402 Protocol**: [x402 Documentation](https://x402.org)
-- **ZapPay Platform**: Open an issue in this repository
+- **RevrPay Platform**: Open an issue in this repository
 - **Supabase**: [Supabase Documentation](https://supabase.com/docs)
 - **ML Service**: See [ml-service/README.md](./ml-service/README.md)
 
-
 ---
 
-**Built with ❤️ by the ZapPay team**
+**Built with ❤️ by the RevrPay team**
 
 _Powered by x402 Protocol | Secured by ML | Zero Fees Forever_

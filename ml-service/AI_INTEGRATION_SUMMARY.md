@@ -1,8 +1,8 @@
-# AI Integration Summary - ZapPay Analysis Engine
+# AI Integration Summary - RevrPay Analysis Engine
 
 ## Overview
 
-Successfully integrated advanced machine learning capabilities into the ZapPay analysis-engine, transforming it from a rule-based system to a hybrid AI-powered fraud detection platform.
+Successfully integrated advanced machine learning capabilities into the RevrPay analysis-engine, transforming it from a rule-based system to a hybrid AI-powered fraud detection platform.
 
 ## What Was Built
 
@@ -11,18 +11,21 @@ Successfully integrated advanced machine learning capabilities into the ZapPay a
 A complete Python-based ML service with:
 
 **Machine Learning Models:**
+
 - ✅ **Random Forest Classifier** (200 estimators, balanced classes)
 - ✅ **XGBoost Classifier** (gradient boosting with auto-scaling)
 - ✅ **Isolation Forest** (anomaly detection, unsupervised)
 - ✅ **Ensemble Model** (60% RF + 40% XGBoost weighting)
 
 **Advanced Features:**
+
 - ✅ **Explainable AI** - SHAP values for model interpretability
 - ✅ **Anomaly Detection** - Detect unusual wallet behavior patterns
 - ✅ **Transaction Prediction** - Predict future risk evolution
 - ✅ **Continuous Learning** - Feedback loop for model improvement
 
 **API Endpoints:**
+
 - `POST /api/predict` - Fraud probability prediction
 - `POST /api/predict/explain` - Explainable predictions with SHAP
 - `POST /api/predict/anomaly` - Anomaly detection
@@ -36,21 +39,25 @@ A complete Python-based ML service with:
 Extracts **45+ features** matching Kaggle dataset schema:
 
 **Transaction Metrics:**
+
 - Total transactions sent/received
 - Transaction frequency and timing
 - Time intervals between transactions
 
 **Value Statistics:**
+
 - Min/max/avg Ether sent/received
 - Transaction value patterns
 - Balance tracking
 
 **Behavioral Features:**
+
 - Unique addresses interacted with
 - Smart contract interactions
 - Gas usage patterns
 
 **ERC20 Token Metrics:**
+
 - Token transfer counts
 - Token value statistics
 - Token type diversity
@@ -58,12 +65,14 @@ Extracts **45+ features** matching Kaggle dataset schema:
 ### 3. Data Processing & Training
 
 **Kaggle Dataset Integration:**
+
 - ✅ Automated data loading and preprocessing
 - ✅ Imbalanced data handling (SMOTE + RandomUnderSampler)
 - ✅ Train/test split with stratification
 - ✅ Feature normalization and validation
 
 **Training Pipeline:**
+
 - ✅ Automated model training script (`train_models.py`)
 - ✅ Model versioning and persistence
 - ✅ Performance metrics tracking
@@ -74,14 +83,17 @@ Extracts **45+ features** matching Kaggle dataset schema:
 Integrated ML predictions with existing analysis-engine:
 
 **Scoring Weights (when ML enabled):**
+
 - 🤖 ML Prediction: **45%**
 - 📊 Traditional Rules: **30%** (wallet age, transaction history, behavior)
 - 🛡️ AML Compliance: **25%** (MetaSleuth)
 
 **Scoring Weights (ML fallback):**
+
 - Original rule-based system (20% age, 25% history, 15% reputation, 10% behavior, 30% AML)
 
 **Smart Fallback:**
+
 - Graceful degradation if ML service unavailable
 - Automatic detection of ML service status
 - Seamless switching between hybrid and rule-based
@@ -89,6 +101,7 @@ Integrated ML predictions with existing analysis-engine:
 ### 5. Integration Layer (`mlProvider.ts`)
 
 **ML Client for Analysis Engine:**
+
 - ✅ Feature extraction from wallet data
 - ✅ ML prediction API calls
 - ✅ Anomaly detection integration
@@ -96,6 +109,7 @@ Integrated ML predictions with existing analysis-engine:
 - ✅ Error handling and graceful degradation
 
 **Automatic Feature Mapping:**
+
 - Converts Basescan transaction data to ML features
 - Calculates derived metrics (averages, frequencies, etc.)
 - Handles missing/incomplete data
@@ -103,11 +117,13 @@ Integrated ML predictions with existing analysis-engine:
 ### 6. Continuous Learning System
 
 **Feedback Loop:**
+
 - Merchants can submit actual fraud labels
 - Feedback stored in JSONL format
 - Automatic retraining when threshold reached (default: 1000 samples)
 
 **Model Lifecycle:**
+
 - Version tracking for all models
 - A/B testing before deployment
 - Performance monitoring and alerting
@@ -117,6 +133,7 @@ Integrated ML predictions with existing analysis-engine:
 ### Expected Model Performance
 
 **Fraud Detection (Ensemble):**
+
 - Accuracy: **>95%**
 - Precision: **>90%** (minimize false positives)
 - Recall: **>85%** (catch real fraud)
@@ -124,6 +141,7 @@ Integrated ML predictions with existing analysis-engine:
 - AUC-ROC: **>0.95**
 
 **System Performance:**
+
 - Prediction Latency: **<500ms**
 - Feature Extraction: **<100ms**
 - Total Analysis Time: **<1s** (including blockchain calls)
@@ -177,7 +195,7 @@ Integrated ML predictions with existing analysis-engine:
 ## File Structure
 
 ```
-ZapPay/
+RevrPay/
 ├── ml-service/                    # NEW - ML microservice
 │   ├── src/
 │   │   ├── main.py               # FastAPI application
@@ -421,6 +439,7 @@ curl -X POST http://localhost:3003/api/train/feedback \
 See `QUICKSTART.md` for detailed setup.
 
 **TL;DR:**
+
 ```bash
 # 1. Install dependencies
 cd ml-service
@@ -476,15 +495,15 @@ MIN_RECALL=0.80
 
 ## Advantages Over Rule-Based System
 
-| Feature | Rule-Based Only | With AI Integration |
-|---------|----------------|---------------------|
-| **Accuracy** | ~75-80% | **>95%** |
-| **False Positives** | High (15-20%) | **Low (5-8%)** |
-| **Novel Fraud Detection** | Poor | **Excellent** (anomaly detection) |
-| **Adaptability** | Manual updates | **Auto-learning** |
-| **Explainability** | Good | **Excellent** (SHAP values) |
-| **Prediction Speed** | Fast | **Fast** (<500ms) |
-| **Complex Patterns** | Limited | **Advanced** |
+| Feature                   | Rule-Based Only | With AI Integration               |
+| ------------------------- | --------------- | --------------------------------- |
+| **Accuracy**              | ~75-80%         | **>95%**                          |
+| **False Positives**       | High (15-20%)   | **Low (5-8%)**                    |
+| **Novel Fraud Detection** | Poor            | **Excellent** (anomaly detection) |
+| **Adaptability**          | Manual updates  | **Auto-learning**                 |
+| **Explainability**        | Good            | **Excellent** (SHAP values)       |
+| **Prediction Speed**      | Fast            | **Fast** (<500ms)                 |
+| **Complex Patterns**      | Limited         | **Advanced**                      |
 
 ## Continuous Improvement
 
@@ -513,6 +532,7 @@ MIN_RECALL=0.80
 ## Next Steps
 
 ### Immediate (Done ✅)
+
 - [x] Set up ML service infrastructure
 - [x] Train initial models on Kaggle data
 - [x] Integrate with analysis-engine
@@ -521,6 +541,7 @@ MIN_RECALL=0.80
 - [x] Build continuous learning system
 
 ### Short-term (To Do)
+
 - [ ] Download and train on full Kaggle dataset
 - [ ] Collect real-world feedback from merchants
 - [ ] Fine-tune model hyperparameters
@@ -529,6 +550,7 @@ MIN_RECALL=0.80
 - [ ] Add PostgreSQL for feedback storage
 
 ### Long-term (Future)
+
 - [ ] Multi-chain support (Ethereum, Polygon, etc.)
 - [ ] Graph neural networks for transaction graphs
 - [ ] Real-time feature extraction from blockchain
@@ -540,6 +562,7 @@ MIN_RECALL=0.80
 ## Monitoring & Maintenance
 
 **Metrics to Track:**
+
 - Model accuracy, precision, recall
 - Prediction latency
 - False positive/negative rates
@@ -547,6 +570,7 @@ MIN_RECALL=0.80
 - Model drift indicators
 
 **Maintenance Tasks:**
+
 - Weekly model retraining
 - Monthly performance review
 - Quarterly model evaluation
@@ -555,12 +579,14 @@ MIN_RECALL=0.80
 ## Support & Documentation
 
 **Full Documentation:**
+
 - `README.md` - Complete ML service docs
 - `QUICKSTART.md` - Setup guide
 - `CLAUDE.md` - Overall architecture
 - FastAPI Docs: http://localhost:3003/docs
 
 **Key Concepts:**
+
 - Feature engineering: Extract ML features from blockchain data
 - Ensemble learning: Combine multiple models for better accuracy
 - SHAP values: Explain individual predictions

@@ -1,6 +1,6 @@
 # Backend Deployment Guide
 
-This guide covers deploying the ZapPay backend server with x402 facilitator support.
+This guide covers deploying the RevrPay backend server with x402 facilitator support.
 
 ## 🎯 Quick Deploy Options
 
@@ -77,8 +77,8 @@ The `Dockerfile` is already created. Deploy to:
 
 ```bash
 # Build from repo root (not server directory)
-docker build -f Dockerfile -t zappay-server .
-docker run -p 3001:3001 --env-file server/.env zappay-server
+docker build -f Dockerfile -t revrpay-server .
+docker run -p 3001:3001 --env-file server/.env revrpay-server
 ```
 
 **Note**: The root `Dockerfile` builds x402-packages first, then the server. The `server/Dockerfile` is for reference only and won't work standalone due to x402-packages dependency.

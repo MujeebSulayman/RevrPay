@@ -142,6 +142,12 @@ export const api = {
 		console.log('✅ Risk analysis fetched:', response.data);
 		return response.data;
 	},
+
+	// Auth providers
+	getAuthProviders: async () => {
+		const response = await baseApiClient.get('/api/auth/providers');
+		return response.data;
+	},
 };
 
 // Types for API responses

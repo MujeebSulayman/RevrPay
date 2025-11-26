@@ -77,13 +77,13 @@ export function Sidebar({ className }: SidebarProps) {
       {/* Logo */}
       <div className="flex h-14 items-center border-b px-4">
         <div className="flex items-center space-x-2">
-          <img 
-            src="/zappay-logo-white.png" 
-            alt="ZapPay Logo" 
+          <img
+            src="/revrpay-logo-white.png"
+            alt="RevrPay Logo"
             className="h-6 w-6 object-contain"
           />
           {!isCollapsed && (
-            <span className="font-semibold">ZapPay</span>
+            <span className="font-semibold">RevrPay</span>
           )}
         </div>
       </div>
@@ -94,7 +94,7 @@ export function Sidebar({ className }: SidebarProps) {
           {navigation.map((item) => {
             const isActive = location.pathname === item.href;
             const Icon = item.icon;
-            
+
             return (
               <NavLink
                 key={item.name}
@@ -113,11 +113,11 @@ export function Sidebar({ className }: SidebarProps) {
                   <div className="flex items-center justify-between w-full min-w-0">
                     <span className="truncate">{item.name}</span>
                     <div className="flex items-center space-x-1 ml-2 flex-shrink-0">
-                                              {item.demo && (
-                          <Badge variant="outline" className="text-xs bg-amber-50 text-orange-700 border-orange-200">
-                            Demo
-                          </Badge>
-                        )}
+                      {item.demo && (
+                        <Badge variant="outline" className="text-xs bg-amber-50 text-orange-700 border-orange-200">
+                          Demo
+                        </Badge>
+                      )}
                       {item.comingSoon && (
                         <Badge variant="secondary" className="text-xs">
                           Soon
@@ -139,13 +139,13 @@ export function Sidebar({ className }: SidebarProps) {
             <Button variant="ghost" className="w-full justify-start p-2 h-auto bg-white hover:bg-gray-100 text-gray-900">
               <div className="flex items-center space-x-3 w-full">
                 <Avatar className="h-8 w-8 flex-shrink-0">
-                  <AvatarImage src="/avatars/01.png" alt="@zappay" />
-                  <AvatarFallback>ZP</AvatarFallback>
+                  <AvatarImage src="/avatars/01.png" alt="@revrpay" />
+                  <AvatarFallback>RP</AvatarFallback>
                 </Avatar>
                 {!isCollapsed && (
                   <>
                     <div className="flex-1 min-w-0 text-left">
-                      <p className="text-sm font-medium truncate">ZapPay</p>
+                      <p className="text-sm font-medium truncate">RevrPay</p>
                     </div>
                     <ChevronDown className="h-4 w-4 text-gray-500 flex-shrink-0" />
                   </>
@@ -157,22 +157,22 @@ export function Sidebar({ className }: SidebarProps) {
             <DropdownMenuLabel className="font-normal">
               <div className="flex items-center space-x-2">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src="/avatars/01.png" alt="@zappay" />
-                  <AvatarFallback>ZP</AvatarFallback>
+                  <AvatarImage src="/avatars/01.png" alt="@revrpay" />
+                  <AvatarFallback>RP</AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="text-sm font-medium leading-none">ZapPay</p>
+                  <p className="text-sm font-medium leading-none">RevrPay</p>
                 </div>
               </div>
             </DropdownMenuLabel>
-            
+
             <DropdownMenuSeparator />
-            
+
             <DropdownMenuItem>
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
             </DropdownMenuItem>
-            
+
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <div className="flex items-center w-full">
@@ -201,22 +201,22 @@ export function Sidebar({ className }: SidebarProps) {
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuSub>
-            
+
             <DropdownMenuSeparator />
-            
+
             <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">
               Accounts
             </DropdownMenuLabel>
-            
+
             <DropdownMenuItem>
               <div className="flex items-center w-full">
                 <div className="mr-2 h-4 w-4 rounded-full bg-blue-100 flex items-center justify-center">
                   <span className="text-xs text-blue-600">C</span>
                 </div>
-                <span className="flex-1">ZapPay</span>
+                <span className="flex-1">RevrPay</span>
               </div>
             </DropdownMenuItem>
-            
+
             <DropdownMenuItem>
               <div className="flex items-center w-full">
                 <div className="mr-2 h-4 w-4 rounded-full bg-green-100 flex items-center justify-center">
@@ -225,7 +225,7 @@ export function Sidebar({ className }: SidebarProps) {
                 <span className="flex-1">Demo Account</span>
               </div>
             </DropdownMenuItem>
-            
+
             <DropdownMenuItem>
               <div className="flex items-center w-full">
                 <div className="mr-2 h-4 w-4 rounded-full bg-purple-100 flex items-center justify-center">
@@ -234,9 +234,9 @@ export function Sidebar({ className }: SidebarProps) {
                 <span className="flex-1">Test Account</span>
               </div>
             </DropdownMenuItem>
-            
+
             <DropdownMenuSeparator />
-            
+
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <Plus className="mr-2 h-4 w-4" />
@@ -253,9 +253,9 @@ export function Sidebar({ className }: SidebarProps) {
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuSub>
-            
+
             <DropdownMenuSeparator />
-            
+
             <DropdownMenuItem>
               <div className="flex items-center w-full">
                 <div className="mr-2 h-4 w-4 rounded-full bg-gray-100 flex items-center justify-center">
@@ -274,7 +274,7 @@ export function Sidebar({ className }: SidebarProps) {
                 </TooltipProvider>
               </div>
             </DropdownMenuItem>
-            
+
             <DropdownMenuItem onClick={async () => { await signOut(); navigate('/auth'); }}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Sign out</span>

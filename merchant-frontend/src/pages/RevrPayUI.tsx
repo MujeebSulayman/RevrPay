@@ -137,7 +137,7 @@ const api = {
 export function RevrPayUI() {
   const { paymentLink } = useParams<{ paymentLink: string }>();
   const navigate = useNavigate();
-
+  
   // Use wallet context
   const {
     isConnected: isWalletConnected,
@@ -244,15 +244,15 @@ export function RevrPayUI() {
 
       // Purchase 24-hour session (equivalent to the $1.00 payment)
       const session = await api.purchase24HourSession(selectedNetwork, selectedToken, paymentLink);
-
+      
       console.log("✅ Payment successful:", session);
-
+      
       setPaymentResult({
         type: 'success',
         message: 'Payment successful!',
         session: session,
       });
-
+      
       setPaymentStatus('completed');
     } catch (error: any) {
       console.error("❌ Payment failed:", error);
@@ -390,7 +390,7 @@ export function RevrPayUI() {
               <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Payment Link Error</h3>
               <p className="text-gray-600 mb-4">{paymentLinkError}</p>
-              <Button
+              <Button 
                 onClick={() => navigate('/')}
                 className="bg-orange-600 hover:bg-orange-700 text-white"
               >
@@ -403,239 +403,245 @@ export function RevrPayUI() {
         {/* Payment UI */}
         {!isLoadingPaymentLink && !paymentLinkError && paymentLinkData && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Payment Terminal Preview */}
-            <div className="space-y-6">
-              <Card className="border-amber-100 bg-gradient-to-br from-white to-amber-50/30">
-                <CardHeader>
-                  <CardTitle className="flex items-center text-amber-600">
-                    <CreditCard className="h-5 w-5 mr-2" />
-                    Payment Terminal
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="bg-white rounded-lg shadow-lg p-6 border-2 border-dashed border-amber-200">
-                    <div className="text-center space-y-6">
-                      {/* Payment Status */}
-                      <div className="flex items-center justify-center">
-                        {paymentStatus === 'pending' && (
-                          <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
-                            <CreditCard className="h-6 w-6 text-gray-400" />
-                          </div>
-                        )}
-                        {paymentStatus === 'processing' && (
-                          <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center animate-pulse">
-                            <div className="w-6 h-6 border-2 border-orange-600 border-t-transparent rounded-full animate-spin"></div>
-                          </div>
-                        )}
-                        {paymentStatus === 'completed' && (
-                          <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                            <CheckCircle className="h-6 w-6 text-orange-600" />
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Payment Details */}
-                      <div>
-                        <h3 className="text-xl font-semibold text-gray-900">
-                          {paymentLinkData?.product_name || 'Loading...'}
-                        </h3>
-                      </div>
-
-                      {/* Amount */}
-                      <div className="space-y-2">
-                        <div className="text-3xl font-bold text-gray-900">
-                          ${paymentLinkData?.pricing?.toFixed(2) || '0.00'} {selectedToken}
+          {/* Payment Terminal Preview */}
+          <div className="space-y-6">
+            <Card className="border-amber-100 bg-gradient-to-br from-white to-amber-50/30">
+              <CardHeader>
+                <CardTitle className="flex items-center text-amber-600">
+                  <CreditCard className="h-5 w-5 mr-2" />
+                  Payment Terminal
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-white rounded-lg shadow-lg p-6 border-2 border-dashed border-amber-200">
+                  <div className="text-center space-y-6">
+                    {/* Payment Status */}
+                    <div className="flex items-center justify-center">
+                      {paymentStatus === 'pending' && (
+                        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+                          <CreditCard className="h-6 w-6 text-gray-400" />
                         </div>
-                      </div>
-
-                      {/* Network and Token Selector */}
-                      <div className="w-full">
-                        {isWalletConnected && (
-                          <>
-                            {/* Network Mismatch Warning */}
-                            {currentChain.id !== getChainIdFromKey(selectedNetwork) && (
-                              <div className="mb-4 p-3 bg-yellow-50 border border-yellow-300 rounded-lg">
-                                <p className="text-sm font-semibold text-yellow-800 flex items-center">
-                                  <AlertCircle className="h-4 w-4 mr-2" />
-                                  Network Mismatch
-                                </p>
-                                <p className="text-xs text-yellow-700 mt-1">
-                                  Your wallet is on <strong>{currentChain.name}</strong> but you selected <strong>{NETWORK_NAMES[selectedNetwork]}</strong>.
-                                  Click the network below to switch.
-                                </p>
-                              </div>
-                            )}
-                            {/* Connected Network Info */}
-                            {currentChain.id === getChainIdFromKey(selectedNetwork) && (
-                              <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                                <p className="text-sm font-semibold text-green-800 flex items-center">
-                                  <CheckCircle className="h-4 w-4 mr-2" />
-                                  Ready to Pay
-                                </p>
-                                <p className="text-xs text-green-700 mt-1">
-                                  Connected to <strong>{currentChain.name}</strong> (Chain ID: {currentChain.id})
-                                </p>
-                              </div>
-                            )}
-                          </>
-                        )}
-                        <NetworkTokenSelector
-                          selectedNetwork={selectedNetwork}
-                          selectedToken={selectedToken}
-                          onNetworkSelect={handleNetworkSelect}
-                          onTokenSelect={handleTokenSelect}
-                        />
-                      </div>
-
-                      {/* Payment Button */}
-                      <Button
-                        onClick={handlePayWithCrypto}
-                        disabled={
-                          !isWalletConnected ||
-                          paymentStatus !== 'pending' ||
-                          (isWalletConnected && currentChain.id !== getChainIdFromKey(selectedNetwork))
-                        }
-                        className={`w-full ${paymentStatus === 'completed'
-                            ? 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white'
-                            : 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white'
-                          }`}
-                      >
-                        {paymentStatus === 'pending' && (
-                          <>
-                            <Wallet className="h-4 w-4 mr-2" />
-                            {isWalletConnected && currentChain.id !== getChainIdFromKey(selectedNetwork)
-                              ? 'Switch Network to Pay'
-                              : 'Pay with Crypto'}
-                          </>
-                        )}
-                        {paymentStatus === 'processing' && (
-                          <>
-                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                            Processing Payment...
-                          </>
-                        )}
-                        {paymentStatus === 'completed' && (
-                          <>
-                            <CheckCircle className="h-4 w-4 mr-2" />
-                            Payment Complete
-                          </>
-                        )}
-                      </Button>
-
-                      {/* Helper text for network mismatch */}
-                      {isWalletConnected && currentChain.id !== getChainIdFromKey(selectedNetwork) && paymentStatus === 'pending' && (
-                        <p className="text-xs text-center text-yellow-600">
-                          Click on {NETWORK_NAMES[selectedNetwork]} in the network selector above to switch
-                        </p>
                       )}
+                      {paymentStatus === 'processing' && (
+                        <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center animate-pulse">
+                          <div className="w-6 h-6 border-2 border-orange-600 border-t-transparent rounded-full animate-spin"></div>
+                        </div>
+                      )}
+                      {paymentStatus === 'completed' && (
+                        <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                          <CheckCircle className="h-6 w-6 text-orange-600" />
+                        </div>
+                      )}
+                    </div>
 
-                      {/* Security Badge */}
-                      <div className="flex items-center justify-center space-x-2 text-xs text-gray-500">
-                        <Shield className="h-3 w-3" />
-                        <span>Secure crypto payment powered by RevrPay</span>
+                    {/* Payment Details */}
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900">
+                        {paymentLinkData?.product_name || 'Loading...'}
+                      </h3>
+                    </div>
+
+                    {/* Amount */}
+                    <div className="space-y-2">
+                      <div className="text-3xl font-bold text-gray-900">
+                        ${paymentLinkData?.pricing?.toFixed(2) || '0.00'} {selectedToken}
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
 
-              {/* Payment Result */}
-              {paymentResult && (
-                <Card className="border-amber-100 bg-gradient-to-br from-white to-amber-50/30">
-                  <CardHeader>
-                    <CardTitle className="text-amber-600">Payment Result</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className={`p-4 rounded-lg ${paymentResult.type === 'success'
-                        ? 'bg-green-50 border border-green-200'
-                        : 'bg-red-50 border border-red-200'
+                    {/* Network and Token Selector */}
+                    <div className="w-full">
+                      {isWalletConnected && (
+                        <>
+                          {/* Network Mismatch Warning */}
+                          {currentChain.id !== getChainIdFromKey(selectedNetwork) && (
+                            <div className="mb-4 p-3 bg-yellow-50 border border-yellow-300 rounded-lg">
+                              <p className="text-sm font-semibold text-yellow-800 flex items-center">
+                                <AlertCircle className="h-4 w-4 mr-2" />
+                                Network Mismatch
+                              </p>
+                              <p className="text-xs text-yellow-700 mt-1">
+                                Your wallet is on <strong>{currentChain.name}</strong> but you selected <strong>{NETWORK_NAMES[selectedNetwork]}</strong>.
+                                Click the network below to switch.
+                              </p>
+                            </div>
+                          )}
+                          {/* Connected Network Info */}
+                          {currentChain.id === getChainIdFromKey(selectedNetwork) && (
+                            <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                              <p className="text-sm font-semibold text-green-800 flex items-center">
+                                <CheckCircle className="h-4 w-4 mr-2" />
+                                Ready to Pay
+                              </p>
+                              <p className="text-xs text-green-700 mt-1">
+                                Connected to <strong>{currentChain.name}</strong> (Chain ID: {currentChain.id})
+                              </p>
+                            </div>
+                          )}
+                        </>
+                      )}
+                      <NetworkTokenSelector
+                        selectedNetwork={selectedNetwork}
+                        selectedToken={selectedToken}
+                        onNetworkSelect={handleNetworkSelect}
+                        onTokenSelect={handleTokenSelect}
+                      />
+                    </div>
+
+                    {/* Payment Button */}
+                    <Button
+                      onClick={handlePayWithCrypto}
+                      disabled={
+                        !isWalletConnected ||
+                        paymentStatus !== 'pending' ||
+                        (isWalletConnected && currentChain.id !== getChainIdFromKey(selectedNetwork))
+                      }
+                      className={`w-full ${
+                        paymentStatus === 'completed'
+                          ? 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white'
+                          : 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white'
+                      }`}
+                    >
+                      {paymentStatus === 'pending' && (
+                        <>
+                          <Wallet className="h-4 w-4 mr-2" />
+                          {isWalletConnected && currentChain.id !== getChainIdFromKey(selectedNetwork)
+                            ? 'Switch Network to Pay'
+                            : 'Pay with Crypto'}
+                        </>
+                      )}
+                      {paymentStatus === 'processing' && (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                          Processing Payment...
+                        </>
+                      )}
+                      {paymentStatus === 'completed' && (
+                        <>
+                          <CheckCircle className="h-4 w-4 mr-2" />
+                          Payment Complete
+                        </>
+                      )}
+                    </Button>
+
+                    {/* Helper text for network mismatch */}
+                    {isWalletConnected && currentChain.id !== getChainIdFromKey(selectedNetwork) && paymentStatus === 'pending' && (
+                      <p className="text-xs text-center text-yellow-600">
+                        Click on {NETWORK_NAMES[selectedNetwork]} in the network selector above to switch
+                      </p>
+                    )}
+
+                    {/* Security Badge */}
+                    <div className="flex items-center justify-center space-x-2 text-xs text-gray-500">
+                      <Shield className="h-3 w-3" />
+                      <span>Secure crypto payment powered by RevrPay</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Payment Result */}
+            {paymentResult && (
+              <Card className="border-amber-100 bg-gradient-to-br from-white to-amber-50/30">
+                <CardHeader>
+                  <CardTitle className="text-amber-600">Payment Result</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className={`p-4 rounded-lg ${
+                    paymentResult.type === 'success'
+                      ? 'bg-green-50 border border-green-200'
+                      : 'bg-red-50 border border-red-200'
+                  }`}>
+                    <div className="flex items-start space-x-2">
+                      {paymentResult.type === 'success' ? (
+                        <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                      ) : (
+                        <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                      )}
+                      <div className={`font-medium whitespace-pre-line ${
+                        paymentResult.type === 'success' ? 'text-green-800' : 'text-red-800'
                       }`}>
-                      <div className="flex items-start space-x-2">
-                        {paymentResult.type === 'success' ? (
-                          <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
-                        ) : (
-                          <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-                        )}
-                        <div className={`font-medium whitespace-pre-line ${paymentResult.type === 'success' ? 'text-green-800' : 'text-red-800'
-                          }`}>
-                          {paymentResult.message}
-                        </div>
+                        {paymentResult.message}
                       </div>
-                      {paymentResult.session && (
-                        <div className="mt-3 text-sm text-gray-600">
-                          <p><strong>Session ID:</strong> {paymentResult.session.id}</p>
-                          {/* <p><strong>Type:</strong> {paymentResult.session.type}</p>
+                    </div>
+                    {paymentResult.session && (
+                      <div className="mt-3 text-sm text-gray-600">
+                        <p><strong>Session ID:</strong> {paymentResult.session.id}</p>
+                        {/* <p><strong>Type:</strong> {paymentResult.session.type}</p>
                         <p><strong>Valid For:</strong> {paymentResult.session.validFor}</p> */}
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-
-            {/* Payment Details */}
-            <div className="space-y-6">
-              <Card className="border-amber-100 bg-gradient-to-br from-white to-amber-50/30">
-                <CardHeader>
-                  <CardTitle className="text-amber-600">Payment Details</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Product</span>
-                      <span className="font-medium">{paymentLinkData?.product_name || 'Loading...'}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Amount</span>
-                      <span className="font-medium">${paymentLinkData?.pricing?.toFixed(2) || '0.00'} {selectedToken}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-600 text-left">Network Fee</span>
-                      <span className="font-medium text-right">Free! Subsidy by RevrPay</span>
-                    </div>
-                    <div className="border-t pt-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-900 font-semibold">Total</span>
-                        <span className="text-gray-900 font-semibold">${paymentLinkData?.pricing?.toFixed(2) || '0.00'} {selectedToken}</span>
                       </div>
-                    </div>
-                  </div>
-
-
-                </CardContent>
-              </Card>
-
-              {/* Status */}
-              <Card className="border-amber-100 bg-gradient-to-br from-white to-amber-50/30">
-                <CardHeader>
-                  <CardTitle className="text-amber-600">Payment Status</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-3 h-3 rounded-full ${isWalletConnected ? 'bg-orange-500' : 'bg-gray-300'
-                        }`}></div>
-                      <span className="text-sm">Wallet Connection</span>
-                      {isWalletConnected && <CheckCircle className="h-4 w-4 text-orange-600" />}
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-3 h-3 rounded-full ${paymentStatus === 'processing' || paymentStatus === 'completed' ? 'bg-orange-500' : 'bg-gray-300'
-                        }`}></div>
-                      <span className="text-sm">Payment Processing</span>
-                      {(paymentStatus === 'processing' || paymentStatus === 'completed') && <CheckCircle className="h-4 w-4 text-orange-600" />}
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-3 h-3 rounded-full ${paymentStatus === 'completed' ? 'bg-orange-500' : 'bg-gray-300'
-                        }`}></div>
-                      <span className="text-sm">Transaction Complete</span>
-                      {paymentStatus === 'completed' && <CheckCircle className="h-4 w-4 text-orange-600" />}
-                    </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            )}
           </div>
+
+          {/* Payment Details */}
+          <div className="space-y-6">
+            <Card className="border-amber-100 bg-gradient-to-br from-white to-amber-50/30">
+              <CardHeader>
+                <CardTitle className="text-amber-600">Payment Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Product</span>
+                    <span className="font-medium">{paymentLinkData?.product_name || 'Loading...'}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Amount</span>
+                    <span className="font-medium">${paymentLinkData?.pricing?.toFixed(2) || '0.00'} {selectedToken}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600 text-left">Network Fee</span>
+                    <span className="font-medium text-right">Free! Subsidy by RevrPay</span>
+                  </div>
+                  <div className="border-t pt-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-900 font-semibold">Total</span>
+                      <span className="text-gray-900 font-semibold">${paymentLinkData?.pricing?.toFixed(2) || '0.00'} {selectedToken}</span>
+                    </div>
+                  </div>
+                </div>
+
+
+              </CardContent>
+            </Card>
+
+            {/* Status */}
+            <Card className="border-amber-100 bg-gradient-to-br from-white to-amber-50/30">
+              <CardHeader>
+                <CardTitle className="text-amber-600">Payment Status</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-3 h-3 rounded-full ${
+                      isWalletConnected ? 'bg-orange-500' : 'bg-gray-300'
+                    }`}></div>
+                    <span className="text-sm">Wallet Connection</span>
+                    {isWalletConnected && <CheckCircle className="h-4 w-4 text-orange-600" />}
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-3 h-3 rounded-full ${
+                      paymentStatus === 'processing' || paymentStatus === 'completed' ? 'bg-orange-500' : 'bg-gray-300'
+                    }`}></div>
+                    <span className="text-sm">Payment Processing</span>
+                    {(paymentStatus === 'processing' || paymentStatus === 'completed') && <CheckCircle className="h-4 w-4 text-orange-600" />}
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-3 h-3 rounded-full ${
+                      paymentStatus === 'completed' ? 'bg-orange-500' : 'bg-gray-300'
+                    }`}></div>
+                    <span className="text-sm">Transaction Complete</span>
+                    {paymentStatus === 'completed' && <CheckCircle className="h-4 w-4 text-orange-600" />}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
         )}
       </div>
     </div>

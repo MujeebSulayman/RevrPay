@@ -241,7 +241,7 @@ export async function walletRiskMiddlewareEnhanced(c: Context, next: Next) {
 					riskLevel: riskCheck.riskAnalysis?.riskLevel,
 					recommendations: riskCheck.riskAnalysis?.recommendations?.slice(0, 3), // First 3 recommendations
 					support:
-						'Please contact support@zappay.com if you believe this is an error',
+						'Please contact support@revrpay.com if you believe this is an error',
 					timestamp: new Date().toISOString(),
 				},
 				403

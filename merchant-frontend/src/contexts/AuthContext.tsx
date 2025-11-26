@@ -9,6 +9,7 @@ type AuthContextValue = {
   signInWithPassword: (email: string, password: string) => Promise<{ error?: string } | void>;
   signInWithMagicLink: (email: string) => Promise<{ error?: string } | void>;
   signUpWithPassword: (email: string, password: string) => Promise<{ error?: string } | void>;
+  signInWithOAuth: (provider: 'google' | 'github' | 'discord' | 'twitter') => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -65,6 +66,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async signUpWithPassword(email, password) {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) return { error: error.message };
+    },
+    async signInWithOAuth(provider) {
+      await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        },
+      });
     },
     async signOut() {
       await supabase.auth.signOut();

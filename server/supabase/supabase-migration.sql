@@ -1,4 +1,4 @@
--- Rebuild schema for ZapPay
+-- Rebuild schema for RevrPay
 
 -- Required extensions
 CREATE EXTENSION IF NOT EXISTS pgcrypto;

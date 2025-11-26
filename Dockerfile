@@ -1,4 +1,4 @@
-# Build from root directory: docker build -f Dockerfile -t zappay-server .
+# Build from root directory: docker build -f Dockerfile -t revrpay-server .
 FROM node:20-alpine AS builder
 
 # Install pnpm for x402-packages

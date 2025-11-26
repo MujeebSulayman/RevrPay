@@ -447,6 +447,81 @@ app.get('/api/health', (c) => {
 	});
 });
 
+// Free endpoint - get enabled auth providers from Supabase
+app.get('/api/auth/providers', async (c) => {
+	try {
+		if (!supabaseUrl || !supabaseAnonKey) {
+			console.warn('Missing Supabase configuration');
+			return c.json({ enabledProviders: [] }, 200);
+		}
+
+		// Use Supabase GoTrue API to get auth settings
+		// This endpoint returns the auth configuration including enabled providers
+		const goTrueApiUrl = `${supabaseUrl}/auth/v1/settings`;
+
+		const response = await fetch(goTrueApiUrl, {
+			headers: {
+				apikey: supabaseAnonKey,
+				Authorization: `Bearer ${supabaseAnonKey}`,
+			},
+		});
+
+		if (!response.ok) {
+			const errorText = await response.text();
+			console.warn(
+				'Failed to fetch auth settings from GoTrue API:',
+				response.status,
+				errorText
+			);
+			// Return empty array if API fails
+			return c.json({ enabledProviders: [] }, 200);
+		}
+
+		const authSettings = await response.json();
+		console.log(
+			'Auth settings response:',
+			JSON.stringify(authSettings, null, 2)
+		);
+
+		// Extract enabled providers from the settings
+		// GoTrue API returns providers in different formats depending on version
+		const enabledProviders: string[] = [];
+		const providerMap: Record<string, string> = {
+			EXTERNAL_GOOGLE: 'google',
+			EXTERNAL_GITHUB: 'github',
+			EXTERNAL_DISCORD: 'discord',
+			EXTERNAL_TWITTER: 'twitter',
+			// Also check lowercase versions
+			google: 'google',
+			github: 'github',
+			discord: 'discord',
+			twitter: 'twitter',
+		};
+
+		// Check each provider in the settings
+		// The settings object might have providers in different formats
+		for (const [configKey, providerId] of Object.entries(providerMap)) {
+			const providerConfig = authSettings[configKey];
+			// Provider is enabled if it exists and has enabled: true
+			if (providerConfig) {
+				if (
+					providerConfig.enabled === true ||
+					providerConfig.enabled === 'true' ||
+					(typeof providerConfig === 'object' && providerConfig.client_id) // Has client_id means it's configured
+				) {
+					enabledProviders.push(providerId);
+				}
+			}
+		}
+
+		return c.json({ enabledProviders });
+	} catch (error) {
+		console.error('Error fetching auth providers:', error);
+		// Return empty array on error
+		return c.json({ enabledProviders: [] }, 200);
+	}
+});
+
 // Free endpoint - get wallet risk analysis from analysis-engine
 app.get('/api/risk/wallet/:address', async (c) => {
 	const address = c.req.param('address');

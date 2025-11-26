@@ -9,7 +9,7 @@ export function Plugins() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 text-left">Plugins</h1>
-          <p className="text-gray-600 mt-2">Integrate ZapPay into your platforms.</p>
+          <p className="text-gray-600 mt-2">Integrate RevrPay into your platforms.</p>
         </div>
       </div>
 
@@ -27,9 +27,9 @@ export function Plugins() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-gray-600 mb-4">
-              Download the ZapPay WordPress plugin.
+              Download the RevrPay WordPress plugin.
             </p>
-            <a href="/plugins/zappay-wordpress.zip" download>
+            <a href="/plugins/revrpay-wordpress.zip" download>
               <Button className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white">
                 <Download className="h-4 w-4 mr-2" />
                 Download Plugin
@@ -49,7 +49,7 @@ export function Plugins() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-gray-600 mb-4">
-              Connect ZapPay to your Shopify store using our app integration.
+              Connect RevrPay to your Shopify store using our app integration.
             </p>
             <Button variant="outline" className="border-amber-300 hover:bg-amber-50" disabled>
               Open Shopify App

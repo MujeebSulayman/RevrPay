@@ -1,7 +1,7 @@
 # This Dockerfile is for building from server/ directory
 # For Railway/Render: Use root Dockerfile instead (build from repo root)
 # For local testing from server/: This won't work due to x402-packages dependency
-# Use the root Dockerfile: docker build -f Dockerfile -t zappay-server .
+# Use the root Dockerfile: docker build -f Dockerfile -t revrpay-server .
 
 FROM node:20-alpine
 
