@@ -1,6 +1,6 @@
 {
 	"$schema": "https://openapi.vercel.sh/vercel.json",
-	"installCommand": "npm install -g pnpm@10.7.0 && npm run vercel:install",
+	"installCommand": "corepack enable && corepack prepare pnpm@10.7.0 --activate && npm run vercel:install",
 	"buildCommand": "npm run vercel:build",
 	"outputDirectory": "merchant-frontend/dist",
 	"framework": "vite"
