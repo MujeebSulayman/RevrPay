@@ -1,0 +1,7 @@
+{
+	"$schema": "https://openapi.vercel.sh/vercel.json",
+	"installCommand": "npm install -g pnpm && npm install && npm run build:x402 && cd merchant-frontend && npm install",
+	"buildCommand": "cd merchant-frontend && npm run build",
+	"outputDirectory": "merchant-frontend/dist",
+	"framework": "vite"
+}
