@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { createWalletClient, custom, type WalletClient, type Chain } from 'viem';
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
+import { createWalletClient, custom } from 'viem';
+import type { WalletClient, Chain } from 'viem';
 import { baseSepolia, sepolia, arbitrumSepolia } from 'viem/chains';
 import type { Hex } from 'viem';
 
@@ -15,7 +16,7 @@ export const SUPPORTED_CHAINS = {
   sepolia,
   arbitrumSepolia,
   baseSepolia,
-} as const;
+} as const satisfies Record<string, Chain>;
 
 export type SupportedChainKey = keyof typeof SUPPORTED_CHAINS;
 
@@ -33,13 +34,19 @@ interface WalletContextType {
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
-export function WalletProvider({ children }: { children: React.ReactNode}) {
+const resolveChainKeyById = (chainId: number): SupportedChainKey => {
+  const entry = Object.entries(SUPPORTED_CHAINS).find(([, chain]) => chain.id === chainId);
+  return (entry?.[0] as SupportedChainKey) ?? 'sepolia';
+};
+
+export function WalletProvider({ children }: { children: ReactNode }) {
   const [isConnected, setIsConnected] = useState(false);
   const [address, setAddress] = useState<Hex | null>(null);
   const [walletClient, setWalletClient] = useState<WalletClient | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
-  const [currentChain, setCurrentChain] = useState<Chain>(arbitrumSepolia); // Default to Arbitrum Sepolia for PYUSD testing
+  const [currentChainKey, setCurrentChainKey] = useState<SupportedChainKey>('arbitrumSepolia'); // Default to Arbitrum Sepolia for PYUSD testing
+  const currentChain = SUPPORTED_CHAINS[currentChainKey];
 
   // Check if wallet is already connected on mount
   useEffect(() => {
@@ -60,17 +67,10 @@ export function WalletProvider({ children }: { children: React.ReactNode}) {
           }) as string;
 
           // Find matching chain from supported chains, default to sepolia
-          let chain = sepolia;
           const chainIdDecimal = parseInt(chainId, 16);
-
-          for (const [key, supportedChain] of Object.entries(SUPPORTED_CHAINS)) {
-            if (supportedChain.id === chainIdDecimal) {
-              chain = supportedChain;
-              break;
-            }
-          }
-
-          setCurrentChain(chain);
+          const resolvedKey = resolveChainKeyById(chainIdDecimal);
+          const chain = SUPPORTED_CHAINS[resolvedKey];
+          setCurrentChainKey(resolvedKey);
 
           const client = createWalletClient({
             account: accounts[0] as Hex,
@@ -98,7 +98,7 @@ export function WalletProvider({ children }: { children: React.ReactNode}) {
       }
 
       const selectedChain = SUPPORTED_CHAINS[chainKey];
-      setCurrentChain(selectedChain);
+      setCurrentChainKey(chainKey);
 
       // Request account access
       const accounts = await window.ethereum.request({
@@ -209,7 +209,7 @@ export function WalletProvider({ children }: { children: React.ReactNode}) {
       }
 
       // Update chain state
-      setCurrentChain(selectedChain);
+      setCurrentChainKey(chainKey);
 
       // Update wallet client with new chain
       if (address) {
@@ -249,16 +249,9 @@ export function WalletProvider({ children }: { children: React.ReactNode}) {
       const handleChainChanged = async (chainIdHex: string) => {
         // Update current chain when user switches network in wallet
         const chainIdDecimal = parseInt(chainIdHex, 16);
-
-        let chain = sepolia; // Default fallback
-        for (const [key, supportedChain] of Object.entries(SUPPORTED_CHAINS)) {
-          if (supportedChain.id === chainIdDecimal) {
-            chain = supportedChain;
-            break;
-          }
-        }
-
-        setCurrentChain(chain);
+        const resolvedKey = resolveChainKeyById(chainIdDecimal);
+        const chain = SUPPORTED_CHAINS[resolvedKey]; // Default fallback handled in resolver
+        setCurrentChainKey(resolvedKey);
 
         // Update wallet client with new chain if connected
         if (address) {
@@ -279,7 +272,7 @@ export function WalletProvider({ children }: { children: React.ReactNode}) {
         window.ethereum.removeListener('chainChanged', handleChainChanged);
       };
     }
-  }, [address, currentChain, disconnectWallet]);
+  }, [address, currentChainKey, disconnectWallet]);
 
   const value: WalletContextType = {
     isConnected,
