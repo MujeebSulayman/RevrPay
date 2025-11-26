@@ -8,9 +8,13 @@
 		"dev:server": "cd server && npm run dev",
 		"dev:client": "cd merchant-frontend && npm run dev",
 		"install:all": "npm install && npm run build:x402 && cd server && npm install && cd ../merchant-frontend && npm install && cd ../analysis-engine && npm install && cd ../facilitator && npm install",
-		"build:x402": "cd x402-packages && pnpm install && set NODE_OPTIONS=--max-old-space-size=8192 && pnpm --filter=x402 build && pnpm --filter=x402-hono build && pnpm --filter=x402-axios build"
+		"build:x402": "cd x402-packages && pnpm install && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm --filter x402 build && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm --filter x402-hono build && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm --filter x402-axios build",
+		"install:frontend": "cd merchant-frontend && npm install",
+		"vercel:install": "npm install && npm run build:x402 && npm run install:frontend",
+		"vercel:build": "cd merchant-frontend && npm run build"
 	},
 	"devDependencies": {
-		"concurrently": "^8.2.2"
+		"concurrently": "^8.2.2",
+		"cross-env": "^7.0.3"
 	}
 }

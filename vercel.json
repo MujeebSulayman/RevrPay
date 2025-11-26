@@ -1,7 +1,7 @@
 {
 	"$schema": "https://openapi.vercel.sh/vercel.json",
-	"installCommand": "npm install -g pnpm@10.7.0 && pnpm install --frozen-lockfile",
-	"buildCommand": "pnpm run build --filter merchant-frontend",
+	"installCommand": "npm install -g pnpm@10.7.0 && npm run vercel:install",
+	"buildCommand": "npm run vercel:build",
 	"outputDirectory": "merchant-frontend/dist",
 	"framework": "vite"
 }
