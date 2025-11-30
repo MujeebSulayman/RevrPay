@@ -32,6 +32,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Handle hash fragments from email confirmation/OAuth redirects
+    const handleHash = async () => {
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      if (hashParams.get('access_token') || hashParams.get('error')) {
+        // Supabase will automatically process the hash via getSession
+        const { data } = await supabase.auth.getSession();
+        if (data.session) {
+          // Clean up the hash from URL
+          window.history.replaceState(null, '', window.location.pathname);
+        }
+      }
+    };
+
+    handleHash();
+
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       setUser(data.session?.user ?? null);
@@ -46,6 +61,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(newSession?.user ?? null);
       if (newSession?.user) {
         upsertProfile(newSession.user).catch(() => { });
+        // Clean up hash if present (from email confirmation)
+        if (window.location.hash) {
+          window.history.replaceState(null, '', window.location.pathname);
+        }
       }
     });
     return () => { sub.subscription.unsubscribe(); };

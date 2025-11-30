@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -26,7 +27,8 @@ const allOAuthProviders: OAuthProvider[] = [
 ];
 
 export function Auth() {
-  const { signInWithPassword, signUpWithPassword, signInWithMagicLink, signInWithOAuth } = useAuth();
+  const { user, loading: authLoading, signInWithPassword, signUpWithPassword, signInWithMagicLink, signInWithOAuth } = useAuth();
+  const navigate = useNavigate();
   const [mode, setMode] = useState<AuthMode>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,6 +38,17 @@ export function Auth() {
   const [isLoading, setIsLoading] = useState(false);
   const [enabledProviders, setEnabledProviders] = useState<string[]>([]);
   const [loadingProviders, setLoadingProviders] = useState(true);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (!authLoading && user) {
+      // Clean up hash fragment if present (from email confirmation)
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+      navigate('/', { replace: true });
+    }
+  }, [user, authLoading, navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
